@@ -20,7 +20,7 @@ async function pushNotify(content: string) {
       channel: "app",
     }),
     ...(PROXY && { proxy: PROXY }),
-  }).catch(() => {});
+  }).catch((e) => console.error("Push error:", e));
 }
 
 async function fetchCoins(): Promise<CoinData[]> {

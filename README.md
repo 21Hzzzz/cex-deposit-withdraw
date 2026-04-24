@@ -4,20 +4,9 @@
 
 ## 依赖
 
-- [Bun](https://bun.sh) v1.3+
+- [Bun](https://bun.sh)
 - PushPlus token（[pushplus.plus](https://www.pushplus.plus) 注册后获取）
 - 可选：HTTP 代理（国内服务器访问 Bitget API 时需要）
-
-## 快速开始
-
-```bash
-git clone https://github.com/your-username/cex-deposit-withdraw.git
-cd cex-deposit-withdraw
-bun install
-cp .env.example .env
-# 编辑 .env，填入 PUSHPLUS_TOKEN 和可选的 HTTPS_PROXY
-bun run index.ts
-```
 
 ## 环境变量
 
@@ -46,37 +35,22 @@ bun run index.ts
 | 某币种新增/删除一条链  | ✅       |
 | 新增/删除币种          | ✅       |
 
-## 部署到 Ubuntu 服务器
-
-**1. 安装 Bun**
+## 部署
 
 ```bash
-curl -fsSL https://bun.sh/install | bash
-source ~/.bashrc
+curl -fsSL https://raw.githubusercontent.com/21Hzzzz/cex-deposit-withdraw/main/deploy.sh | PUSHPLUS_TOKEN=your_token bash
 ```
 
-**2. 克隆项目并配置**
+如需设置代理：
 
 ```bash
-git clone https://github.com/your-username/cex-deposit-withdraw.git
-cd cex-deposit-withdraw
-bun install
-cp .env.example .env
-nano .env
+curl -fsSL https://raw.githubusercontent.com/21Hzzzz/cex-deposit-withdraw/main/deploy.sh | PUSHPLUS_TOKEN=your_token HTTPS_PROXY=http://127.0.0.1:42001 bash
 ```
 
-**3. 用 pm2 守护进程**
+脚本会自动完成：安装 Bun、克隆项目、配置环境变量、注册并启动 systemd 服务。
+
+**卸载**
 
 ```bash
-bunx pm2 start index.ts --interpreter bun --name cex-monitor
-bunx pm2 save
-bunx pm2 startup  # 按提示执行输出的命令以开机自启
-```
-
-**常用命令**
-
-```bash
-bunx pm2 logs cex-monitor
-bunx pm2 restart cex-monitor
-bunx pm2 stop cex-monitor
+systemctl disable --now cex-deposit-withdraw && rm /etc/systemd/system/cex-deposit-withdraw.service && rm -rf /root/cex-deposit-withdraw
 ```
